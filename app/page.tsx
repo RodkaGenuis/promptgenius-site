@@ -1,82 +1,53 @@
 'use client';
-import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
-  const [form, setForm] = useState({
-    objectif: '',
-    idee: '',
-    audience: '',
-    ton: '',
-    contraintes: '',
-    format: '',
-    longueur: '',
-    contexte: '',
-  });
-  const [prompt, setPrompt] = useState('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const generatePrompt = () => {
-    const { objectif, idee, audience, ton, contraintes, format, longueur, contexte } = form;
-    const promptFinal = `Crée un prompt pour un LLM.
-Objectif : ${objectif}
-Idée : ${idee}
-Audience : ${audience}
-Ton : ${ton}
-Contraintes : ${contraintes}
-Format : ${format}
-Longueur : ${longueur}
-Contexte temporel : ${contexte}`;
-    setPrompt(promptFinal);
-  };
-
   return (
-    <main className="min-h-screen bg-white text-gray-900">
-      <section className="p-8 text-center">
-        <h1 className="text-4xl font-bold mb-4">🧠 PromptGenius</h1>
-        <p className="text-lg mb-8">Générez des prompts optimisés pour LLM, adaptés à vos besoins.</p>
-        <a href="#formulaire" className="bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition">
-          Commencer
-        </a>
-      </section>
-
-      <section id="formulaire" className="max-w-3xl mx-auto p-6">
-        <h2 className="text-2xl font-semibold mb-6">🎯 Formulaire de génération</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Object.entries(form).map(([key, value]) => (
-            <input
-              key={key}
-              name={key}
-              placeholder={key}
-              value={value}
-              onChange={handleChange}
-              className="border rounded-lg p-3"
-            />
-          ))}
+    <main className="min-h-screen bg-white flex flex-col justify-between">
+      {/* Header */}
+      <header className="text-center py-12 px-4">
+        <div className="flex justify-center mb-4">
+          <Image src="/logo.png.png" alt="Logo PromptGenius" width={80} height={80} />
         </div>
-        <button onClick={generatePrompt} className="mt-6 bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
-          Générer le prompt
-        </button>
-      </section>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          Génère des prompts ultra personnalisés avec l’IA
+        </h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          PromptGenius te guide pour créer des prompts sur-mesure, adaptés à ton objectif, ton audience et ton style.
+        </p>
+        <Link
+          href="/formulaire"
+          className="inline-block mt-8 bg-purple-600 text-white px-8 py-3 rounded-xl shadow hover:bg-purple-700 transition"
+        >
+          Commencer →
+        </Link>
+      </header>
 
-      {prompt && (
-        <section className="max-w-2xl mx-auto p-6 mt-8 bg-gray-100 rounded-xl">
-          <h3 className="text-xl font-semibold mb-3">📋 Prompt généré :</h3>
-          <pre className="whitespace-pre-wrap bg-white p-4 rounded border text-sm">{prompt}</pre>
-          <button
-            onClick={() => navigator.clipboard.writeText(prompt)}
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Copier le prompt
-          </button>
-        </section>
-      )}
-
-      <footer className="mt-12 p-6 bg-purple-900 text-white text-center">
-        <p>Contactez-nous : <a href="mailto:promptgeniusia@gmail.com" className="underline">promptgeniusia@gmail.com</a></p>
-        <p><a href="https://www.linkedin.com/company/promptgenius-ia" target="_blank" className="underline">LinkedIn PromptGenius</a></p>
+      {/* Footer */}
+      <footer className="bg-purple-900 text-white text-sm text-center py-6 px-4 mt-12">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
+          <p>© 2025 PromptGenius. Tous droits réservés.</p>
+          <div className="flex gap-4">
+            <a href="#" className="hover:underline">Mentions légales</a>
+            <a href="#" className="hover:underline">Politique de confidentialité</a>
+            <a href="mailto:promptgeniusia@gmail.com" className="hover:underline">Contactez-nous</a>
+            <a
+              href="https://www.linkedin.com/company/promptgenius-ia"
+              target="_blank"
+              className="hover:underline flex items-center gap-1"
+            >
+              <svg
+                className="w-4 h-4 fill-current text-pink-300"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+              >
+                <path d="M100.28 448H7.4V148.9h92.88zm-46.44-340c-31.44 0-57-25.56-57-57s25.56-57 57-57 57 25.56 57 57-25.56 57-57 57zm394.2 340h-92.68V302.4c0-34.7-12.4-58.4-43.32-58.4-23.62 0-37.68 15.88-43.88 31.24-2.28 5.56-2.84 13.24-2.84 20.96V448h-92.8s1.24-261.7 0-288.9h92.8v40.96c-.18.28-.43.56-.61.84h.61v-.84c12.32-19 34.32-46.12 83.48-46.12 60.92 0 106.72 39.88 106.72 125.4V448z" />
+              </svg>
+              LinkedIn
+            </a>
+          </div>
+        </div>
       </footer>
     </main>
   );
