@@ -1,6 +1,5 @@
-'use client';
-
-import { useState } from 'react';
+'use client'
+import { useState } from 'react'
 
 export default function Formulaire() {
   const [formulaire, setFormulaire] = useState({
@@ -12,20 +11,16 @@ export default function Formulaire() {
     format: '',
     longueur: '',
     contexte: '',
-    pro: false
-  });
-
-  const [prompt, setPrompt] = useState('');
+  })
+  const [prompt, setPrompt] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormulaire({ ...formulaire, [name]: type === 'checkbox' ? checked : value });
-  };
+    setFormulaire({ ...formulaire, [e.target.name]: e.target.value })
+  }
 
   const genererPrompt = () => {
-    const { objectif, idee, audience, ton, contraintes, format, longueur, contexte, pro } = formulaire;
-
-    const promptFinal = pro ? `
+    const { objectif, idee, audience, ton, contraintes, format, longueur, contexte } = formulaire
+    const promptFinal = `
 ## 🧠 MÉTA-PROMPT GÉNÉRÉ PAR PROMPTGENIUS
 Ce prompt est destiné à un modèle de langage avancé. Il a pour but de générer un contenu parfaitement aligné avec les besoins de l’utilisateur.
 
@@ -36,67 +31,49 @@ ${objectif}
 ${idee}
 
 ---
-### 🛠️ Directives pour l’IA
+
+### 🔧 Directives pour l’IA
 Tu es un assistant IA de haut niveau. Génère le livrable attendu en respectant scrupuleusement tous les éléments ci-dessus.
 
 - Rédige de manière claire et accessible
 - Ne donne pas d’explication. Seulement le livrable attendu.
-` : `
-Crée un prompt pour un LLM.
-Objectif : ${objectif}
-Idée : ${idee}
-Audience : ${audience}
-Ton : ${ton}
-Contraintes : ${contraintes}
-Format : ${format}
-Longueur : ${longueur}
-Contexte temporel : ${contexte}
-`;
 
-    setPrompt(promptFinal);
-  };
+${audience ? '\nAudience : ' + audience : ''}
+${ton ? '\nTon : ' + ton : ''}
+${contraintes ? '\nContraintes : ' + contraintes : ''}
+${format ? '\nFormat : ' + format : ''}
+${longueur ? '\nLongueur : ' + longueur : ''}
+${contexte ? '\nContexte temporel : ' + contexte : ''}
+    `
+    setPrompt(promptFinal.trim())
+  }
 
   return (
-    <main className="min-h-screen bg-white text-black px-6 py-12">
-      <h1 className="text-3xl font-bold mb-6">🧾 Générateur de Prompts</h1>
-
-      <div className="grid grid-cols-1 gap-4 max-w-xl">
-        {['objectif', 'idee', 'audience', 'ton', 'contraintes', 'format', 'longueur', 'contexte'].map((champ) => (
+    <main className="min-h-screen bg-white text-black p-8">
+      <h1 className="text-3xl font-bold text-center mb-4">🧠 Générateur de Prompts</h1>
+      <div className="max-w-xl mx-auto space-y-4">
+        {Object.entries(formulaire).map(([name, value]) => (
           <input
-            key={champ}
-            type="text"
-            name={champ}
-            value={formulaire[champ as keyof typeof formulaire] as string}
+            key={name}
+            name={name}
+            value={value}
             onChange={handleChange}
-            placeholder={champ.charAt(0).toUpperCase() + champ.slice(1)}
-            className="border rounded px-3 py-2"
+            placeholder={name.charAt(0).toUpperCase() + name.slice(1)}
+            className="w-full border p-2 rounded-md"
           />
         ))}
-
-        <label className="flex gap-2 items-center">
-          <input
-            type="checkbox"
-            name="pro"
-            checked={formulaire.pro}
-            onChange={handleChange}
-          />
-          Usage professionnel (active le méta-prompt expert)
-        </label>
-
         <button
           onClick={genererPrompt}
-          className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition"
+          className="w-full bg-purple-700 hover:bg-purple-800 text-white py-2 rounded-md"
         >
           Générer le prompt
         </button>
+        {prompt && (
+          <div className="bg-gray-100 p-4 rounded-md whitespace-pre-wrap">
+            {prompt}
+          </div>
+        )}
       </div>
-
-      {prompt && (
-        <div className="mt-10 p-4 bg-gray-100 rounded">
-          <h2 className="font-bold mb-2">📄 Ton méta-prompt est prêt</h2>
-          <pre className="whitespace-pre-wrap">{prompt}</pre>
-        </div>
-      )}
     </main>
-  );
+  )
 }
